@@ -59,6 +59,30 @@
             $('.level01:eq(1)').click(function() {
                 $(this).siblings(".level02").toggle();
             })
+            $('.level01').click(function() {
+                $(this).addClass('active').siblings().removeClass('active');
+            })
+        })
+        $.ajax({
+            url: "http://localhost:8080/api/v1/admin/user/info",
+            data: "GET",
+            headers: {
+                Authorization: window.localStorage.getItem('token')
+            },
+            success: function(backData) {
+                // 设置左侧的头像和名字
+                $(".user_info>img").attr('src', backData.data.userPic);
+                $(".user_info>span").text('欢迎' + backData.data.nickname);
+                // 右侧顶部的头像
+                $(".user_center_link>img").attr('src', backData.data.userPic)
+
+            },
+            error: function(backData) {
+                console.log(backData);
+                if (backData.statusText == 'Forbidden') {
+                    location.href = 'login.html';
+                }
+            }
         })
     </script>
 </body>
